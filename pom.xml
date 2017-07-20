@@ -116,6 +116,7 @@
 		<module>uimafit-docbook</module>
 		<module>uimafit-cpe</module>
 		<module>uimafit-parent</module>
+		<module>parent-pom</module>
 	</modules>
 
 	<profiles>
