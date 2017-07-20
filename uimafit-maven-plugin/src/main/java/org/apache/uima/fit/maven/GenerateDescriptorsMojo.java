@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -62,7 +62,7 @@ public class GenerateDescriptorsMojo extends AbstractMojo {
    */
   @Parameter(defaultValue="${project.build.directory}/classes", required=true)
   private File outputDirectory;
-  
+
   /**
    * Skip generation of META-INF/org.apache.uima.fit/components.txt
    */
@@ -82,7 +82,7 @@ public class GenerateDescriptorsMojo extends AbstractMojo {
       outputDirectory.mkdirs();
       buildContext.refresh(outputDirectory);
     }
-    
+
     // Get the compiled classes from this project
     String[] files = FileUtils.getFilesFromExtension(project.getBuild().getOutputDirectory(),
             new String[] { "class" });
@@ -99,12 +99,12 @@ public class GenerateDescriptorsMojo extends AbstractMojo {
       String clazzName = clazzPath.replace(File.separator, ".");
       try {
         Class clazz = componentLoader.loadClass(clazzName);
-        
+
         // Do not generate descriptors for abstract classes, they cannot be instantiated.
         if (Modifier.isAbstract(clazz.getModifiers())) {
           continue;
         }
-        
+
         ResourceCreationSpecifier desc = null;
         switch (Util.getType(componentLoader, clazz)) {
           case ANALYSIS_ENGINE:
@@ -121,7 +121,7 @@ public class GenerateDescriptorsMojo extends AbstractMojo {
           out.getParentFile().mkdirs();
           toXML(desc, out.getPath());
           countGenerated++;
-          
+
           // Remember component
           componentsManifest.append("classpath*:").append(clazzPath+".xml").append('\n');
         }
@@ -135,10 +135,10 @@ public class GenerateDescriptorsMojo extends AbstractMojo {
         getLog().warn("Cannot generate descriptor for [" + clazzName + "]", e);
       }
     }
-    
+
     getLog().info(
             "Generated " + countGenerated + " descriptor" + (countGenerated != 1 ? "s." : "."));
-    
+
     // Write META-INF/org.apache.uima.fit/components.txt unless skipped and unless there are no
     // components
     if (!skipComponentsManifest && componentsManifest.length() > 0) {

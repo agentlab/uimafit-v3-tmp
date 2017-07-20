@@ -66,87 +66,22 @@
 	</dependencies>
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-                <configuration>
-                    <source>${maven.compiler.source}</source>
-                </configuration>
-				<executions>
-					<execution>
-						<id>javadocs-distr</id> <!-- name should match one in parent-pom -->
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>javadoc</goal>
-						</goals>
-						<configuration>
-							<doctitle>Apache uimaFIT ${project.version} User-Level API Documentation</doctitle>
-							<windowtitle>Apache uimaFIT ${project.version} User-Level API Documentation</windowtitle>
-							<notimestamp>true</notimestamp>
-							<links>
-								<link>http://uima.apache.org/d/uimaj-${uima.version}/apidocs/</link>
-							</links>
-							<groups>
-								<group>
-									<title>uimaFIT</title>
-									<packages>org.apache.uima.fit.component*:org.apache.uima.fit.descriptor*:org.apache.uima.fit.factory*:org.apache.uima.fit.pipeline*:org.apache.uima.fit.testing*:org.apache.uima.fit.util*</packages>
-								</group>
-								<group>
-									<title>CPE support</title>
-									<packages>org.apache.uima.fit.cpe*</packages>
-								</group>
-							</groups>
-							<sourcepath>uimafit-core/src/main/java;uimafit-cpe/src/main/java</sourcepath>
-							<!-- Exclude UIMA types and internal API -->
-							<excludePackageNames>*.type:*.internal.*:*.impl.*</excludePackageNames>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+
 
 		</plugins>
 	</build>
 
 	<modules>
 		<module>uimafit-core</module>
-		<module>uimafit-examples</module>
+<!--		<module>uimafit-examples</module>
 		<module>uimafit-spring</module>
 		<module>uimafit-maven-plugin</module>
 		<module>uimafit-legacy-support</module>
 		<module>uimafit-docbook</module>
-		<module>uimafit-cpe</module>
+		<module>uimafit-cpe</module>-->
 		<module>uimafit-parent</module>
 		<module>parent-pom</module>
 	</modules>
 
-	<profiles>
-		<profile>
-			<id>apache-release</id>
-			<build>
-				<!-- Run jira report -->
-				<!-- depends on having -DjiraVersion set -->
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-changes-plugin</artifactId>
-                        <version>2.11</version>
-						<inherited>false</inherited>
-						<executions>
-							<execution>
-								<id>default-cli</id>
-								<goals>
-									<goal>jira-report</goal>
-								</goals>
-								<phase>generate-resources</phase>
-								<configuration>
-									<fixVersionIds>${jiraVersion}</fixVersionIds>
-									<component>uimaFIT,uimaFIT-Maven-Plugin</component>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>    
+
 </project>

@@ -49,7 +49,7 @@
 		</pluginRepository>
 	</pluginRepositories>
     -->
-    
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -114,7 +114,7 @@
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-context</artifactId>
 				<version>${spring.version}</version>
-				<!--  
+				<!--
 				 - This is excluded in the assembly and not here to avoid unwanted side-effects
 				 - on users' projects.
 				<exclusions>
@@ -142,77 +142,12 @@
 
 	<build>
 		<plugins>
-      <!-- This should no longer be required with current versions of the maven-resources-plugin
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<configuration>
-					<encoding>${project.build.sourceEncoding}</encoding>
-				</configuration>
-			</plugin>
-      -->
-			<plugin>
-				<groupId>org.codehaus.gmaven</groupId>
-				<artifactId>gmaven-plugin</artifactId>
-				<version>1.5</version>
-				<executions>
-					<execution>
-						<!-- Load postNoticeText from NOTICE file -->
-						<id>read-notice</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>execute</goal>
-						</goals>
-						<configuration>
-							<source>
-								def noticeFile = new File(project.basedir.path +
-								"/NOTICE");
-								if (noticeFile.exists()) {
-								project.properties.postNoticeText = noticeFile.text;
-								}
-							</source>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+
 		</plugins>
 		<pluginManagement>
 			<plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-gpg-plugin</artifactId>
-                    <version>1.6</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.rat</groupId>
-                    <artifactId>apache-rat-plugin</artifactId>
-                    <version>0.11</version>
-                    <executions>
-                        <execution>
-                            <id>default-cli</id>
-                            <configuration>
-                                <excludes>
-                                    <!-- Plain documentation -->
-                                    <exclude>README*</exclude>
-                                    <!-- Release files -->
-                                    <exclude>RELEASE_NOTES*</exclude>
-                                    <exclude>issuesFixed/**</exclude>
-                                    <exclude>release.properties</exclude>
-                                    <!-- Build controls -->
-                                    <exclude>.activate-enforce-compatibility</exclude>
-                                </excludes>
-                            </configuration>
-                        </execution>
-                    </executions>
-                    <dependencies>
-                        <!-- https://issues.apache.org/jira/browse/RAT-158 -->
-                        <dependency>
-                            <groupId>org.apache.maven.doxia</groupId>
-                            <artifactId>doxia-core</artifactId>
-                            <version>1.7</version>
-                        </dependency>
-                    </dependencies>
-                </plugin>
+
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
@@ -223,25 +158,7 @@
                         <!--encoding>UTF-8</encoding this inherited from apache pom 7 -->
                     </configuration>
                 </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>2.10.3</version> 
-                    <executions>
-                        <execution>
-                            <id>attach-javadocs</id>
-                            <configuration>
-                                <source>${maven.compiler.source}</source>
-                            </configuration> 
-                        </execution>
-                        <execution>
-                            <id>default-cli</id>  <!-- Jenkins runs this apparently 3/2015 -->
-                            <configuration>
-                                <source>${maven.compiler.source}</source>
-                            </configuration> 
-                        </execution>
-                    </executions>
-                </plugin>
+
 				<plugin>
 					<groupId>org.apache.uima</groupId>
 					<artifactId>jcasgen-maven-plugin</artifactId>
@@ -276,120 +193,5 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-    <profiles>
-        <profile>
-            <id>findbugs</id>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.codehaus.mojo</groupId>
-                            <artifactId>findbugs-maven-plugin</artifactId>
-                            <version>3.0.3</version>
-                            <executions>
-                                <execution>
-                                    <phase>package</phase>
-                                    <goals>
-                                        <goal>findbugs</goal>
-                                    </goals>
-                                </execution>
-                            </executions>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>findbugs-maven-plugin</artifactId>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>enforce-compatibility</id>
-            <activation>
-        <file>
-          <exists>.activate-enforce-compatibility</exists>
-        </file>
-            </activation>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-              <groupId>org.apache.rat</groupId>
-              <artifactId>apache-rat-plugin</artifactId>
-              <executions>
-                <execution>
-                  <id>default-cli</id>
-                  <configuration>
-                    <excludes combine.children="append">
-                      <exclude>**/api-change-report/**/*.*</exclude>
-                    </excludes>
-                  </configuration>
-                </execution>
-              </executions>
-            </plugin>
-          </plugins>
-        </pluginManagement>
-
-        <plugins>
-          <!-- https://siom79.github.io/japicmp/MavenPlugin.html -->
-          <plugin>
-            <groupId>com.github.siom79.japicmp</groupId>
-            <artifactId>japicmp-maven-plugin</artifactId>
-            <version>0.9.3</version>
-            <configuration>
-              <oldVersion>
-                                <dependency>
-                  <groupId>${project.groupId}</groupId>
-                  <artifactId>${project.artifactId}</artifactId>
-                  <version>${compat.previous.version}</version>
-                                </dependency>
-              </oldVersion>
-              <parameter>
-                <onlyModified>true</onlyModified>
-                <!-- filter out classes with impl in their package or class name -->
-                <postAnalysisScript>${project.basedir}/../uimafit-parent/src/main/groovy/api-report.groovy</postAnalysisScript>
-              </parameter>
-            </configuration>
-                            <executions>
-                                <execution>
-                                    <phase>verify</phase>
-                                    <goals>
-                  <goal>cmp</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-
-          <!-- This copy is to have the api change report included in the source distribution -->
-          <plugin>
-            <artifactId>maven-antrun-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>copy-API-change-report</id>
-                <phase>install</phase>  <!-- must follow verify -->
-                <goals>
-                  <goal>run</goal>
-                                    </goals>
-                                    <configuration>
-                  <target>
-                    <taskdef name="if" classname="net.sf.antcontrib.logic.IfTask" />
-                    <if>
-                      <available file="${project.build.directory}/japicmp/" />
-                      <then>
-                        <copy toDir="${basedir}/api-change-report">
-                          <fileset dir="${project.build.directory}/japicmp" />
-                        </copy>
-                      </then>
-                    </if>
-                  </target>
-                                    </configuration>
-                                </execution>
-                            </executions>
-                        </plugin>
-                    </plugins>
-            </build>
-        </profile>
-    </profiles>
+ 
 </project>
